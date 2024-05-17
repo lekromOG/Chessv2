@@ -4,7 +4,7 @@ public class Bishop extends Piece {
     }
 
     @Override
-    public boolean isValidMove(Position newPosition) {
+    public boolean isValidMove(Position newPosition, final Board board) {
         int xDistance = Math.abs(newPosition.getRow() - this.getX());
         int yDistance = Math.abs(newPosition.getCol() - this.getY());
 

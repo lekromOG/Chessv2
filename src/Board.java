@@ -1,5 +1,5 @@
 public class Board {
-    private Piece[][] board;
+    public Piece[][] board;
 
     public Board() {
         board = new Piece[8][8];
@@ -9,7 +9,7 @@ public class Board {
     private void initializeBoard() {
         // Initialize white pieces
         for (int i = 0; i < 8; i++) {
-            board[1][i] = new Pawn("Pawn", 1, i);
+            board[1][i] = new Pawn("White", 1, i);
         }
         board[0][0] = new Rook("White",  0, 0);
         board[0][7] = new Rook("White",  0, 7);
@@ -45,9 +45,9 @@ public class Board {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board[i][j] == null) {
-                    System.out.print("- ");
+                    System.out.print(" - ");
                 } else {
-                    System.out.print(board[i][j].getName().charAt(0) + " ");
+                    System.out.print(String.valueOf(board[i][j].getName().charAt(0)) + String.valueOf(board[i][j].getColor().charAt(0) + " "));
                 }
             }
             System.out.println();
@@ -56,13 +56,9 @@ public class Board {
 
     public void movePiece(Piece piece, Position newPosition) {
         Position oldPosition = new Position(piece.getX(), piece.getY());
-        if (isPositionEmpty(newPosition) && piece.isValidMove(newPosition)) {
-            board[oldPosition.getRow()][oldPosition.getCol()] = null;
-            board[newPosition.getRow()][newPosition.getCol()] = piece;
-            piece.move(newPosition.getRow(), newPosition.getCol());
-        } else {
-            throw new IllegalArgumentException("Invalid move");
-        }
+        board[oldPosition.getRow()][oldPosition.getCol()] = null;
+        board[newPosition.getRow()][newPosition.getCol()] = piece;
+        piece.move(newPosition.getRow(), newPosition.getCol());
     }
 
     public Piece getPieceAtPosition(Position position) {

@@ -13,7 +13,7 @@ public abstract class Piece {
         this.isAlive = true;
     }
 
-    public abstract boolean isValidMove(Position newPosition);
+    public abstract boolean isValidMove(Position newPosition, final Board board);
 
     protected boolean isWithinBounds(Position position) {
         return position.getRow() >= 0 && position.getRow() < 8 &&
