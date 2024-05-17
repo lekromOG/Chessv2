@@ -5,9 +5,28 @@ public class Bishop extends Piece {
 
     @Override
     public boolean isValidMove(Position newPosition, final Board board) {
-        int xDistance = Math.abs(newPosition.getRow() - this.getX());
-        int yDistance = Math.abs(newPosition.getCol() - this.getY());
+        if (!isWithinBounds(newPosition)) {
+            return false;
+        }
 
-        return isWithinBounds(newPosition) && (xDistance == yDistance);
+        int xDirection = Integer.signum(newPosition.getRow() - this.getX());
+        int yDirection = Integer.signum(newPosition.getCol() - this.getY());
+
+        if (Math.abs(newPosition.getRow() - this.getX()) != Math.abs(newPosition.getCol() - this.getY())) {
+            return false; // Bishop can't move unless the move is diagonal
+        }
+
+        int xPosition = this.getX() + xDirection;
+        int yPosition = this.getY() + yDirection;
+
+        while (xPosition != newPosition.getRow() || yPosition != newPosition.getCol()) {
+            if (board.getPieceAtPosition(new Position(xPosition, yPosition)) != null) {
+                return false; // There is a piece in the path
+            }
+            xPosition += xDirection;
+            yPosition += yDirection;
+        }
+
+        return true;
     }
 }

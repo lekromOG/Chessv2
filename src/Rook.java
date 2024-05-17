@@ -5,9 +5,28 @@ public class Rook extends Piece {
 
     @Override
     public boolean isValidMove(Position newPosition, final Board board) {
-        int xDistance = Math.abs(newPosition.getRow() - this.getX());
-        int yDistance = Math.abs(newPosition.getCol() - this.getY());
+        if (!isWithinBounds(newPosition)) {
+            return false;
+        }
 
-        return isWithinBounds(newPosition) && (xDistance == 0 || yDistance == 0);
+        int xDirection = Integer.signum(newPosition.getRow() - this.getX());
+        int yDirection = Integer.signum(newPosition.getCol() - this.getY());
+
+        if (xDirection != 0 && yDirection != 0) {
+            return false; // Rook can't move diagonally
+        }
+
+        int xPosition = this.getX() + xDirection;
+        int yPosition = this.getY() + yDirection;
+
+        while (xPosition != newPosition.getRow() || yPosition != newPosition.getCol()) {
+            if (board.getPieceAtPosition(new Position(xPosition, yPosition)) != null) {
+                return false; // There is a piece in the path
+            }
+            xPosition += xDirection;
+            yPosition += yDirection;
+        }
+
+        return true;
     }
 }
