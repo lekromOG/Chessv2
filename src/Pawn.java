@@ -8,23 +8,19 @@ public class Pawn extends Piece {
     @Override
     public boolean isValidMove(Position newPosition, final Board board) {
         if (super.getColor().equals("White")) {
-            System.out.println(super.getX() + " " + super.getY() + " " + newPosition.getRow() + " " + newPosition.getCol());
-            System.out.println(hasMoved);
-            if(!hasMoved) {
-                if (newPosition.getRow() == super.getX() + 2 && newPosition.getCol() == super.getY()) {
-                    hasMoved = true;
-                    return true;
-                } else if (newPosition.getRow() == super.getX() + 1 && newPosition.getCol() == super.getY()) {
-                    hasMoved = true;
-                    return true;
-                } else if (newPosition.getRow() == super.getX() + 1 && newPosition.getCol() == super.getY() + 1) {
-                    return true;
-                } else if (newPosition.getRow() == super.getX() - 1 && newPosition.getCol() == super.getY() + 1) {
-                    return true;
-                }
+            if(!hasMoved && newPosition.getRow() == super.getX() + 2 && newPosition.getCol() == super.getY() && board.getPieceAtPosition(new Position(super.getX() + 1, super.getY())) == null) {
+                hasMoved = true;
+                return true;
+            } else if (newPosition.getRow() == super.getX() + 1 && newPosition.getCol() == super.getY()) {
+                hasMoved = true;
+                return true;
+            } else if (newPosition.getRow() == super.getX() + 1 && newPosition.getCol() == super.getY() + 1) {
+                return true;
+            } else if (newPosition.getRow() == super.getX() - 1 && newPosition.getCol() == super.getY() + 1) {
+                return true;
             }
         } else if (super.getColor().equals("Black")) {
-            if (!hasMoved && newPosition.getRow() == super.getX() - 2 && newPosition.getCol() == super.getY()) {
+            if (!hasMoved && newPosition.getRow() == super.getX() - 2 && newPosition.getCol() == super.getY() && board.getPieceAtPosition(new Position(super.getX() - 1, super.getY())) == null) {
                 hasMoved = true;
                 return true;
             } else if (newPosition.getRow() == super.getX() - 1 && newPosition.getCol() == super.getY()) {
