@@ -1,54 +1,54 @@
-import java.util.Scanner;
+import java.util.Scanner; // Import the Scanner class
 
-public class Main {
-    public static Board board = new Board();
-    public static void main(String[] args) {
-        String currentPlayer = "White";
-        Scanner scanner = new Scanner(System.in);
+public class Main { // Main class
+    public static Board board = new Board(); // Create a new Board object
+    public static void main(String[] args) { // main Method
+        String currentPlayer = "White"; // The current player is white
+        Scanner scanner = new Scanner(System.in); // Create a new Scanner object
 
-        while (true) {
-            board.display();
-            Piece pieceToMove = null;
-            Position newPosition = null;
+        while (true) { // Infinite loop
+            board.display(); // Display the board
+            Piece pieceToMove = null; // Initialize pieceToMove to null
+            Position newPosition = null; // Initialize newPosition to null
 
-            while (pieceToMove == null || newPosition == null) {
-                if (pieceToMove == null) {
-                    System.out.println(currentPlayer + "'s turn. Enter piece to move (format: x1,y1):");
-                    String input = scanner.nextLine();
-                    String[] piecePosition = input.split(",");
-                    int pieceX = Integer.parseInt(piecePosition[0]);
-                    int pieceY = Integer.parseInt(piecePosition[1]);
-                    System.out.println("pieceX: " + pieceX + ", pieceY: " + pieceY);
-                    pieceToMove = board.getPieceAtPosition(new Position(pieceX, pieceY));
-                    System.out.println("name: " + pieceToMove.getName() + ", color: " + pieceToMove.getColor() + ", x: " + pieceToMove.getX() + ", y: " + pieceToMove.getY() + ", isAlive: " + pieceToMove.isAlive());
+            while (pieceToMove == null || newPosition == null) { // While pieceToMove is null or newPosition is null
+                if (pieceToMove == null) { // If pieceToMove is null
+                    System.out.println(currentPlayer + "'s turn. Enter piece to move (format: x1,y1):"); // Print the current player's turn and prompt the user to enter the piece to move
+                    String input = scanner.nextLine(); // Read the user's input
+                    String[] piecePosition = input.split(","); // Split the input by commas
+                    int pieceX = Integer.parseInt(piecePosition[0]); // Parse the x position
+                    int pieceY = Integer.parseInt(piecePosition[1]); // Parse the y position
+                    System.out.println("pieceX: " + pieceX + ", pieceY: " + pieceY); // Print the x and y positions
+                    pieceToMove = board.getPieceAtPosition(new Position(pieceX, pieceY)); // Get the piece at the specified position
+                    System.out.println("name: " + pieceToMove.getName() + ", color: " + pieceToMove.getColor() + ", x: " + pieceToMove.getX() + ", y: " + pieceToMove.getY() + ", isAlive: " + pieceToMove.isAlive());  // Print the piece's name, color, x position, y position, and whether it's alive
 
-                    if (pieceToMove == null || !pieceToMove.getColor().equals(currentPlayer)) {
-                        System.out.println("Invalid piece selection, try again.");
-                        pieceToMove = null;
+                    if (pieceToMove == null || !pieceToMove.getColor().equals(currentPlayer)) { // If the piece is null or the piece's color is not the current player's color
+                        System.out.println("Invalid piece selection, try again."); // Print "Invalid piece selection, try again."
+                        pieceToMove = null; // Set pieceToMove to null
+                    }  // If the piece is null or the piece's color is not the current player's color
+                } else { // If pieceToMove is not null
+                    System.out.println("Enter new position for " + pieceToMove.getName() + " (format: x2,y2):"); // Print "Enter new position for [piece name] (format: x2,y2):"
+                    String input = scanner.nextLine(); // Read the user's input
+                    String[] movePosition = input.split(","); // Split the input by commas
+                    int moveX = Integer.parseInt(movePosition[0]); // Parse the x position
+                    int moveY = Integer.parseInt(movePosition[1]); // Parse the y position
+                    newPosition = new Position(moveX, moveY); // Create a new Position object with the parsed x and y positions
+
+                    if (!pieceToMove.isValidMove(newPosition, board)) { // If the move is not valid
+                        System.out.println("Invalid move, try again."); // Print "Invalid move, try again."
+                        newPosition = null; // Set newPosition to null
+                        pieceToMove = null; // Set pieceToMove to null
+                        continue; // Continue to the next iteration of the loop
                     }
-                } else {
-                    System.out.println("Enter new position for " + pieceToMove.getName() + " (format: x2,y2):");
-                    String input = scanner.nextLine();
-                    String[] movePosition = input.split(",");
-                    int moveX = Integer.parseInt(movePosition[0]);
-                    int moveY = Integer.parseInt(movePosition[1]);
-                    newPosition = new Position(moveX, moveY);
 
-                    if (!pieceToMove.isValidMove(newPosition, board)) {
-                        System.out.println("Invalid move, try again.");
-                        newPosition = null;
-                        pieceToMove = null;
-                        continue;
-                    }
-
-                    if (!board.isPositionEmpty(newPosition)) {
-                        Piece pieceAtNewPosition = board.getPieceAtPosition(newPosition);
-                        if (pieceAtNewPosition.getColor().equals(currentPlayer)) {
-                            System.out.println("Cannot capture your own piece, try again.");
-                            newPosition = null;
-                            pieceToMove = null;
-                        }else{
-                            pieceAtNewPosition.kill();
+                    if (!board.isPositionEmpty(newPosition)) { // If the new position is not empty
+                        Piece pieceAtNewPosition = board.getPieceAtPosition(newPosition); // Get the piece at the new position
+                        if (pieceAtNewPosition.getColor().equals(currentPlayer)) { // If the piece at the new position is the same color as the current player
+                            System.out.println("Cannot capture your own piece, try again."); // Print "Cannot capture your own piece, try again."
+                            newPosition = null; // Set newPosition to null
+                            pieceToMove = null; // Set pieceToMove to null
+                        }else{ // If the piece at the new position is not the same color as the current player
+                            pieceAtNewPosition.kill(); // Kill the piece at the new position
                         }
                     }
                 }
@@ -56,10 +56,10 @@ public class Main {
 
             }
 
-            try {
-                board.movePiece(pieceToMove, newPosition);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
+            try { // Try block
+                board.movePiece(pieceToMove, newPosition);  // Move the piece to the new position
+            } catch (IllegalArgumentException e) { // Catch block for IllegalArgumentException
+                System.out.println(e.getMessage()); // Print the exception message
             }
 
             // Switch players

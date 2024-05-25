@@ -9,8 +9,8 @@ public class Bishop extends Piece {
             return false;
         }
 
-        int xDirection = Integer.signum(newPosition.getRow() - this.getX());
-        int yDirection = Integer.signum(newPosition.getCol() - this.getY());
+        int xDirection = Integer.signum(newPosition.getRow() - this.getX()); // 1 if moving right, -1 if moving left (signum returns 1 for positive numbers, -1 for negative numbers, and 0 for 0)
+        int yDirection = Integer.signum(newPosition.getCol() - this.getY()); // 1 if moving up, -1 if moving down
 
         if (Math.abs(newPosition.getRow() - this.getX()) != Math.abs(newPosition.getCol() - this.getY())) {
             return false; // Bishop can't move unless the move is diagonal
